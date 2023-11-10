@@ -86,7 +86,6 @@ export const useMessagesStore = defineStore('messages', () => {
 
     const firebaseGetUpdateTyping = (payLoad) => {
         onChildAdded(dbRef(db, `messages/${payLoad.otherUserId}/${payLoad.myId}`), snapshot => {
-            console.log('added')
             if (snapshot.key == 'isTyping') {
                 messagesInfo.value.isTyping = snapshot.val()
             } else if (snapshot.key == 'notifications') {
@@ -95,7 +94,6 @@ export const useMessagesStore = defineStore('messages', () => {
         })
 
         onChildChanged(dbRef(db, `messages/${payLoad.otherUserId}/${payLoad.myId}`), snapshot => {
-            console.log('changed')
             if (snapshot.key == 'isTyping') {
                 messagesInfo.value.isTyping = snapshot.val()
             } else if (snapshot.key == 'notifications') {
@@ -114,6 +112,3 @@ export const useMessagesStore = defineStore('messages', () => {
         firebaseGetUpdateTyping,
     }
 });
-
-
-

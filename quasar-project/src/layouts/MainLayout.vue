@@ -14,6 +14,18 @@
           label="Back"
           class="q-my-sm absolute-left lt-sm"
         />
+        <q-btn
+          v-show="
+            (!route.path.includes('/chat') && $q.screen.width < 600) ||
+            $q.screen.width > 599
+          "
+          flat
+          round
+          color="white"
+          dense
+          icon="settings"
+          @click="settingVisible = !settingVisible"
+        />
         <div class="absolute-center text-center flex-center">
           <span class="text-h5">{{ pageTitle }}</span> <br />
           <span class="text-subtitle1">{{ lastOnline }}</span>
@@ -34,6 +46,14 @@
         </q-btn>
       </q-toolbar>
     </q-header>
+
+    <transition
+      appear
+      enter-active-class="animated slideInLeft"
+      leave-active-class="animated slideOutLeft"
+    >
+      <Settings v-if="settingVisible" />
+    </transition>
 
     <q-page-container>
       <div
@@ -56,7 +76,7 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted } from "vue";
+import { computed, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUsersStore } from "stores/users";
 import { useOtherUserDetails } from "src/composables/otherUserDetails";
@@ -64,10 +84,13 @@ import UsersPage from "src/pages/UsersPage.vue";
 import ChatPage from "src/pages/ChatPage.vue";
 import AuthPage from "src/pages/AuthPage.vue";
 import { formatDistanceToNow } from "date-fns";
+import Settings from "src/components/Settings";
 
 const store = useUsersStore();
 const route = useRoute();
 const router = useRouter();
+
+const settingVisible = ref(false);
 
 const { otherUserDetails } = useOtherUserDetails();
 const pageTitle = computed(() => {
@@ -106,5 +129,9 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .absolute-right {
   line-height: 1;
+}
+
+.text-subtitle1 {
+  line-height: 0.5rem;
 }
 </style>

@@ -159,25 +159,21 @@ const sendMessage = () => {
 
 // Watching the 'messageContent' variable and displaying spinner dots
 // based on whether the other user is typing or not
+const updateTyping = (update) => {
+  const payLoad = {
+    myId: usersStore.userDetails.id,
+    otherUserId: usersStore.usersData[route.params.otherUserId].id,
+    updates: {
+      isTyping: update,
+    },
+  };
+  messagesStore.firebaseUpdateTyping(payLoad);
+};
 watch(messageContent, (newValue) => {
   if (newValue.trim()) {
-    const payLoad = {
-      myId: usersStore.userDetails.id,
-      otherUserId: usersStore.usersData[route.params.otherUserId].id,
-      updates: {
-        isTyping: true,
-      },
-    };
-    messagesStore.firebaseUpdateTyping(payLoad);
+    updateTyping(true);
   } else {
-    const payLoad = {
-      myId: usersStore.userDetails.id,
-      otherUserId: usersStore.usersData[route.params.otherUserId].id,
-      updates: {
-        isTyping: false,
-      },
-    };
-    messagesStore.firebaseUpdateTyping(payLoad);
+    updateTyping(false);
   }
 });
 
@@ -209,11 +205,6 @@ const formattedDate = (dateToFormat) => {
 };
 
 onMounted(() => {
-  // const payLoad = {
-  //     myId: usersStore.userDetails.id,
-  //     otherUserId: usersStore.usersData[route.params.otherUserId].id,
-  //   };
-  //   messagesStore.firebaseGetUpdateTyping(payLoad);
   setTimeout(() => {
     getMessages();
   }, 500);
@@ -239,8 +230,6 @@ watch(chatPath, () => {
 });
 
 onUnmounted(() => {
-  messageContent.value = "";
-
   messagesStore.firebaseClearMessages();
   router.push("/auth");
 });
