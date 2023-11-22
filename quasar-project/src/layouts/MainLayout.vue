@@ -52,7 +52,9 @@
       enter-active-class="animated slideInLeft"
       leave-active-class="animated slideOutLeft"
     >
-      <Settings v-if="settingVisible" />
+      <q-dialog v-model="settingVisible" position="left">
+        <Settings />
+      </q-dialog>
     </transition>
 
     <q-page-container>

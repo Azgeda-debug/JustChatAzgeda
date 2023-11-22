@@ -3,7 +3,8 @@ import { db, auth } from 'src/boot/firebase.js'
 import { ref as dbRef, set, get, onChildAdded, onChildChanged, update, orderByChild, query, endAt, startAt } from "firebase/database";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router';
-import { ref as vueRef } from 'vue'
+import { ref as vueRef, onBeforeUnmount } from 'vue'
+
 
 export const useUsersStore = defineStore('users', () => {
   const router = useRouter()
@@ -24,6 +25,12 @@ export const useUsersStore = defineStore('users', () => {
     else {
       $q.loading.show()
       createUserWithEmailAndPassword(auth, payLoad.email, payLoad.password).then(response => {
+
+        $q.notify({
+          type: 'positive',
+          iconL: "check_circle",
+          message: 'This is a "positive" type notification.'
+        })
 
         const userId = response.user.uid
         set(dbRef(db, `users/${userId}`), {
@@ -104,7 +111,27 @@ export const useUsersStore = defineStore('users', () => {
     currentUsers.value = {}
   }
 
+  const updateUser = (payLoad) => {
+    firebaseUpdateUsers({
+      id: userDetails.value.id,
+      updates: {
+        online: true,
+        lastOnline: Date.now(),
+      }
+    })
+  }
+
   const firebaseAuthStateChanged = () => {
+
+    const handlePageVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        updateUser(true)
+      } else {
+        updateUser(false)
+      }
+    };
+
+    document.addEventListener('visibilitychange', handlePageVisibilityChange);
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -121,13 +148,9 @@ export const useUsersStore = defineStore('users', () => {
               email: userData.email
             }
 
-
-            firebaseUpdateUsers({
-              id: userDetails.value.id,
-              updates: {
-                online: true
-              }
-            })
+            if (document.visibilityState === 'visible') {
+              updateUser(true)
+            }
 
             firebaseGetUsers()
             router.push('/')
@@ -135,13 +158,9 @@ export const useUsersStore = defineStore('users', () => {
         })
 
       } else {
-        firebaseUpdateUsers({
-          id: userDetails.value.id,
-          updates: {
-            online: false,
-            lastOnline: Date.now()
-          }
-        })
+        if (document.visibilityState === 'visible') {
+          updateUser(false)
+        }
 
         userDetails.value = {}
         router.push('/auth')
@@ -224,6 +243,11 @@ export const useUsersStore = defineStore('users', () => {
     if (payLoad.id == undefined) return
     else update(dbRef(db, `users/${payLoad.id}`), payLoad.updates)
   }
+
+  onBeforeUnmount(() => {
+    document.removeEventListener('visibilitychange', handlePageVisibilityChange);
+  });
+
 
   return {
     usersData,

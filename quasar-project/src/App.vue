@@ -1,7 +1,5 @@
 <template>
-  <router-view
-  />
-  <!-- v-if="Object.keys(currentUsers).length || route.path == '/auth'" -->
+  <router-view />
 </template>
 
 <script setup>
@@ -14,10 +12,5 @@ const store = useUsersStore();
 
 onMounted(() => {
   store.firebaseAuthStateChanged();
-});
-
-const currentUsers = ref({});
-store.$subscribe((mutation, state) => {
-  currentUsers.value = store.currentUsers;
 });
 </script>
