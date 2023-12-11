@@ -11,7 +11,6 @@
           @click="router.push('/')"
           color="white"
           icon="arrow_back"
-          label="Back"
           class="q-my-sm absolute-left lt-sm"
         />
         <q-btn
@@ -28,22 +27,22 @@
         />
         <div class="absolute-center text-center flex-center">
           <span class="text-h5">{{ pageTitle }}</span> <br />
-          <span class="text-subtitle1">{{ lastOnline }}</span>
+          <span
+            v-if="otherUserDetails && otherUserDetails.data.activeStatus"
+            class="text-subtitle1"
+            >{{ lastOnline }}</span
+          >
         </div>
         <q-btn
-          v-if="store.userDetails.id"
-          rounded
+          v-if="route.path.includes('/chat')"
           flat
-          no-caps
-          dense
-          @click="store.firebaseLogoutUser()"
+          rounded
           color="white"
-          icon="logout"
-          class="q-my-sm absolute-right"
-        >
-          Logout <br />
-          {{ store.userDetails.name }}
-        </q-btn>
+          dense
+          icon="info"
+          class="absolute-right"
+          @click="settingsStore.showSettings = true"
+        />
       </q-toolbar>
     </q-header>
 

@@ -92,6 +92,18 @@
                 <q-toggle v-model="activeStatus" />
               </q-item-section>
             </q-item>
+
+            <q-separator />
+            <q-item-label header>Others</q-item-label>
+
+            <q-item
+              @click="UsersStore.firebaseLogoutUser"
+              tag="label"
+              clickable
+              v-ripple
+            >
+              <q-item-label>Logout</q-item-label>
+            </q-item>
           </q-list>
         </q-scroll-area>
 
@@ -202,10 +214,8 @@ const changeSettings = (value) => {
   } else if (value == "avatar") {
     showAvatarDialog.value = true;
   } else if (value == "darkMode") {
-    // firebaseUpdateSettings('darkMode')
     settingsStore.firebaseUpdateDarkMode(darkMode.value);
   } else if (value == "activeStatus") {
-    // firebaseUpdateSettings('activeStatus')
     settingsStore.firebaseUpdateActiveStatus(activeStatus.value);
   }
 };

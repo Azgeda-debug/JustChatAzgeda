@@ -4,10 +4,10 @@
       <q-scroll-area
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
-        class="absolute full-width full-height"
+        class="absolute full-width full-height chat-page-scroll-bar"
         ref="scrollArea"
       >
-        <div class="chat-page-messages">
+        <div class="chat-page-messages christmas-theme" ref="chatPageMessagesRef">
           <div
             v-if="showMessages && !visible && messagesStore"
             class="q-px-md q-pt-md q-pb-sm column col justify-end"
@@ -17,6 +17,7 @@
               <q-chat-message
                 v-if="showMessageLabel(message.date)"
                 :label="messageLabel(message.date)"
+                class="chat-message"
               />
 
               <q-chat-message
@@ -25,6 +26,7 @@
                 :bg-color="message.from == 'me' ? 'blue' : 'grey'"
                 text-color="white"
                 :stamp="formattedDate(message.date)"
+                class="chat-message"
               />
             </div>
             <q-chat-message
@@ -278,6 +280,8 @@ const messageLabel = (timestamp) => {
 
   return `${date.toLocaleDateString("en-UK", options)}${suffix}`;
 };
+
+const chatPageMessagesRef = ref('')
 </script>
 
 <style lang="scss">
@@ -286,59 +290,12 @@ const messageLabel = (timestamp) => {
 
   .chat-page-messages,
   .no-chat-selected {
-    .q-message-stamp {
-      opacity: 0.75;
+    div {
+      z-index: 2;
     }
 
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      z-index: 1;
-      opacity: 0.18;
-
-      --s: 48px; /* control the size*/
-      --c1: #fffdfd;
-      --c2: #c5bac0;
-      --c3: #dbd8ca;
-
-      --_g: 0 120deg, #0000 0;
-      background: conic-gradient(
-          from 0deg at calc(500% / 6) calc(100% / 3),
-          var(--c3) var(--_g)
-        ),
-        conic-gradient(
-          from -120deg at calc(100% / 6) calc(100% / 3),
-          var(--c2) var(--_g)
-        ),
-        conic-gradient(
-          from 120deg at calc(100% / 3) calc(500% / 6),
-          var(--c1) var(--_g)
-        ),
-        conic-gradient(
-          from 120deg at calc(200% / 3) calc(500% / 6),
-          var(--c1) var(--_g)
-        ),
-        conic-gradient(
-          from -180deg at calc(100% / 3) 50%,
-          var(--c2) 60deg,
-          var(--c1) var(--_g)
-        ),
-        conic-gradient(
-          from 60deg at calc(200% / 3) 50%,
-          var(--c1) 60deg,
-          var(--c3) var(--_g)
-        ),
-        conic-gradient(
-          from -60deg at 50% calc(100% / 3),
-          var(--c1) 120deg,
-          var(--c2) 0 240deg,
-          var(--c3) 0
-        );
-      background-size: calc(var(--s) * 1.732) var(--s);
+    .q-message-stamp {
+      opacity: 0.75;
     }
   }
 
@@ -347,6 +304,7 @@ const messageLabel = (timestamp) => {
     bottom: 0;
     right: 0;
     width: 100%;
+    z-index: 3;
 
     @media (min-width: $breakpoint-sm-min) {
       width: 66.66%;
@@ -361,8 +319,13 @@ const messageLabel = (timestamp) => {
   .isNotTyping {
     margin-bottom: 60px;
   }
+
   .chat-input {
-  color: black;
-}
+    color: black;
+  }
+
+  .chat-page-scroll-bar {
+    z-index: 2;
+  }
 }
 </style>

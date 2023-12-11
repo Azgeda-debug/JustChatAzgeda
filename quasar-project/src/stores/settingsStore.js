@@ -64,6 +64,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const firebaseUpdateActiveStatus = (payLoad) => {
     const userId = getUserId()
 
+
     update(dbRef(db, `users/${userId}`), {
       activeStatus: !payLoad
     })
@@ -79,7 +80,12 @@ export const useSettingsStore = defineStore('settings', () => {
     })
 
     usersStore.userDetails.darkmode = !payLoad
-    $q.dark.toggle()
+    if (usersStore.userDetails.darkmode) {
+      $q.dark.set(true)
+    } else {
+      $q.dark.set(false)
+
+    }
   }
 
   return {

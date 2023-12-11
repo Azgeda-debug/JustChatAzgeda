@@ -38,6 +38,7 @@
             </q-avatar>
 
             <q-icon
+            v-if="user.data.activeStatus"
               size="15px"
               name="circle"
               class="activeIcon"
@@ -70,6 +71,7 @@
             </q-avatar>
 
             <q-icon
+            v-if="user.activeStatus"
               size="15px"
               name="circle"
               class="activeIcon"
