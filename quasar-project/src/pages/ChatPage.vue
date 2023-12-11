@@ -49,8 +49,10 @@
             rounded
             outlined
             v-model="messageContent"
-            bg-color="white"
+            bg-color="grey-3"
             label="Message"
+            label-color="grey-6"
+            class="chat-input"
           >
             <template v-slot:append>
               <q-btn
@@ -59,6 +61,7 @@
                 dense
                 icon="send"
                 type="submit"
+                color="grey-6"
                 @click="sendMessage"
               />
             </template>
@@ -259,7 +262,7 @@ const messageLabel = (timestamp) => {
   const options = { weekday: "long", day: "numeric" };
   const date = new Date(timestamp);
   const getSuffix = (day) => {
-    switch (day % 10) {
+    switch (day) {
       case 1:
         return "st";
       case 2:
@@ -358,5 +361,8 @@ const messageLabel = (timestamp) => {
   .isNotTyping {
     margin-bottom: 60px;
   }
+  .chat-input {
+  color: black;
+}
 }
 </style>

@@ -29,7 +29,7 @@ export const useUsersStore = defineStore('users', () => {
         $q.notify({
           type: 'positive',
           iconL: "check_circle",
-          message: 'This is a "positive" type notification.'
+          message: 'successful registration.'
         })
 
         const userId = response.user.uid
@@ -39,11 +39,13 @@ export const useUsersStore = defineStore('users', () => {
           fullname: `${payLoad.name.charAt(0).toUpperCase() + payLoad.name.slice(1).toLowerCase()} ${payLoad.surname.charAt(0).toUpperCase() + payLoad.surname.slice(1).toLowerCase()}`,
           email: payLoad.email,
           online: true,
+          avatar: false,
+          darkMode: false,
+          activeStatus: true,
         })
 
         userDetails.value = {
           name: payLoad.name,
-          email: payLoad.email,
           surname: payLoad.surname,
           id: userId
         }
@@ -115,7 +117,7 @@ export const useUsersStore = defineStore('users', () => {
     firebaseUpdateUsers({
       id: userDetails.value.id,
       updates: {
-        online: true,
+        online: payLoad,
         lastOnline: Date.now(),
       }
     })
@@ -145,7 +147,9 @@ export const useUsersStore = defineStore('users', () => {
               id: userId,
               name: userData.name,
               surname: userData.surname,
-              email: userData.email
+              avatar: userData.avatar,
+              darkMode: userData.darkMode,
+              activeStatus: userData.activeStatus
             }
 
             if (document.visibilityState === 'visible') {
@@ -158,9 +162,7 @@ export const useUsersStore = defineStore('users', () => {
         })
 
       } else {
-        if (document.visibilityState === 'visible') {
-          updateUser(false)
-        }
+        updateUser(false)
 
         userDetails.value = {}
         router.push('/auth')
@@ -211,6 +213,9 @@ export const useUsersStore = defineStore('users', () => {
             fullname: userData.fullname,
             online: userData.online,
             lastMessage: snapshot.val().lastMessage,
+            avatar: userData.avatar,
+            darkMode: userData.darkMode,
+            activeStatus: userData.activeStatus,
           }
         };
 
@@ -231,6 +236,9 @@ export const useUsersStore = defineStore('users', () => {
             fullname: userData.fullname,
             online: userData.online,
             lastMessage: snapshot.val().lastMessage,
+            avatar: userData.avatar,
+            darkMode: userData.darkMode,
+            activeStatus: userData.activeStatus,
           }
         };
 

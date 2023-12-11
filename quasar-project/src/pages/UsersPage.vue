@@ -8,9 +8,11 @@
       @keyup="searchUsers"
       label="Search"
       class="q-ma-sm"
+      bg-color="grey-3"
+      label-color="grey-6"
     >
       <template v-slot:append>
-        <q-btn flat dense rounded icon="search" />
+        <q-icon name="search" color="grey-6" />
       </template>
     </q-input>
     <q-separator />
@@ -24,23 +26,29 @@
           class="user-item"
         >
           <q-item-section avatar>
-            <q-avatar color="primary" text-color="white">
+            <q-avatar
+              v-if="!user.data.avatar"
+              color="primary"
+              text-color="white"
+            >
               {{ user.data.name.charAt(0) }}{{ user.data.surname.charAt(0) }}
             </q-avatar>
-          </q-item-section>
+            <q-avatar v-else>
+              <img :src="`${user.data.avatar}`" />
+            </q-avatar>
 
-          <q-item-section>
-            <q-item-label class="ellipsis">{{
-              user.data.fullname
-            }}</q-item-label>
-          </q-item-section>
-
-          <q-item-section side>
             <q-icon
               size="15px"
               name="circle"
+              class="activeIcon"
               :color="user.data.online ? 'green' : 'grey-5'"
             />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label class="ellipsis"
+              >{{ user.data.name }} {{ user.data.surname }}</q-item-label
+            >
           </q-item-section>
         </q-item>
       </q-list>
@@ -54,20 +62,24 @@
           class="user-item"
         >
           <q-item-section avatar>
-            <q-avatar color="primary" text-color="white">
+            <q-avatar v-if="!user.avatar" color="primary" text-color="white">
               {{ user.name.charAt(0) }}{{ user.surname.charAt(0) }}
             </q-avatar>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="ellipsis">{{ user.fullname }}</q-item-label>
-          </q-item-section>
+            <q-avatar v-else>
+              <img :src="`${user.avatar}`" />
+            </q-avatar>
 
-          <q-item-section side>
             <q-icon
               size="15px"
               name="circle"
+              class="activeIcon"
               :color="user.online ? 'green' : 'grey-5'"
             />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="ellipsis"
+              >{{ user.name }} {{ user.surname }}</q-item-label
+            >
           </q-item-section>
         </q-item>
       </q-list>
@@ -139,5 +151,9 @@ onMounted(() => {
 <style lang="scss">
 .q-scrollarea__content {
   max-width: 100%;
+}
+
+.activeIcon {
+  transform: translate(180%, -100%);
 }
 </style>

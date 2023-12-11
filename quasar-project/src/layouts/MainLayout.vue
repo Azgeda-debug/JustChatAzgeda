@@ -16,7 +16,7 @@
         />
         <q-btn
           v-show="
-            (!route.path.includes('/chat') && $q.screen.width < 600) ||
+            (route.name == 'UsersPage' && $q.screen.width < 600) ||
             $q.screen.width > 599
           "
           flat
@@ -24,7 +24,7 @@
           color="white"
           dense
           icon="settings"
-          @click="settingVisible = !settingVisible"
+          @click="settingsStore.showSettings = true"
         />
         <div class="absolute-center text-center flex-center">
           <span class="text-h5">{{ pageTitle }}</span> <br />
@@ -47,15 +47,7 @@
       </q-toolbar>
     </q-header>
 
-    <transition
-      appear
-      enter-active-class="animated slideInLeft"
-      leave-active-class="animated slideOutLeft"
-    >
-      <q-dialog v-model="settingVisible" position="left">
-        <Settings />
-      </q-dialog>
-    </transition>
+    <Settings />
 
     <q-page-container>
       <div
@@ -78,10 +70,11 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted, ref } from "vue";
+import { computed, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUsersStore } from "stores/users";
 import { useOtherUserDetails } from "src/composables/otherUserDetails";
+import { useSettingsStore } from "src/stores/settingsStore";
 import UsersPage from "src/pages/UsersPage.vue";
 import ChatPage from "src/pages/ChatPage.vue";
 import AuthPage from "src/pages/AuthPage.vue";
@@ -92,7 +85,7 @@ const store = useUsersStore();
 const route = useRoute();
 const router = useRouter();
 
-const settingVisible = ref(false);
+const settingsStore = useSettingsStore();
 
 const { otherUserDetails } = useOtherUserDetails();
 const pageTitle = computed(() => {

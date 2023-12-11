@@ -42,10 +42,18 @@
         lazy-rules
         outlined
         v-model="formData.password"
-        type="password"
+        :type="showPassword ? 'password' : 'text'"
         autocomplete
         label="Password *"
-      />
+      >
+        <template v-slot:append>
+          <q-icon
+            :name="showPassword ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="showPassword = !showPassword"
+          />
+        </template>
+      </q-input>
 
       <div class="row justify-center">
         <q-btn
@@ -61,11 +69,13 @@
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted } from "vue";
+import { ref, defineProps } from "vue";
 import { useUsersStore } from "stores/users";
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
+
+const showPassword = ref(true);
 
 const store = useUsersStore();
 
