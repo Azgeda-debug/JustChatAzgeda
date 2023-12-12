@@ -7,7 +7,10 @@
         class="absolute full-width full-height chat-page-scroll-bar"
         ref="scrollArea"
       >
-        <div class="chat-page-messages christmas-theme" ref="chatPageMessagesRef">
+        <div
+          class="chat-page-messages"
+          :class="settingsBetweenUsersStore.selectedTheme"
+        >
           <div
             v-if="showMessages && !visible && messagesStore"
             class="q-px-md q-pt-md q-pb-sm column col justify-end"
@@ -17,6 +20,7 @@
               <q-chat-message
                 v-if="showMessageLabel(message.date)"
                 :label="messageLabel(message.date)"
+                dense
                 class="chat-message"
               />
 
@@ -27,7 +31,20 @@
                 text-color="white"
                 :stamp="formattedDate(message.date)"
                 class="chat-message"
-              />
+              >
+                <template v-slot:avatar>
+                  <q-avatar
+                    size="lg"
+                    :class="message.from == 'me' ? 'q-ml-xs' : 'q-mr-xs'"
+                  >
+                    <img
+                      v-if="messageAvatar(message.from)"
+                      :src="`${messageAvatar(message.from)}`"
+                    />
+                    <q-icon size="xl"  class="bg-grey" v-else name="person" />
+                  </q-avatar>
+                </template>
+              </q-chat-message>
             </div>
             <q-chat-message
               v-if="messagesStore && isTyping"
@@ -83,6 +100,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useMessagesStore } from "stores/messages";
 import { useUsersStore } from "stores/users";
+import { useSettingsBetweenUsers } from "src/stores/settingsBetweenUsersStore";
 import { useRoute, useRouter } from "vue-router";
 import { date } from "quasar";
 
@@ -91,6 +109,7 @@ const router = useRouter();
 
 const messagesStore = useMessagesStore();
 const usersStore = useUsersStore();
+const settingsBetweenUsersStore = useSettingsBetweenUsers();
 
 const messages = ref({});
 
@@ -212,6 +231,7 @@ const formattedDate = (dateToFormat) => {
 onMounted(() => {
   setTimeout(() => {
     getMessages();
+    settingsBetweenUsersStore.firebaseGetTheme();
   }, 500);
 });
 
@@ -236,6 +256,7 @@ watch(chatPath, () => {
 
 onUnmounted(() => {
   messagesStore.firebaseClearMessages();
+  settingsBetweenUsersStore.selectedTheme = "";
   router.push("/auth");
 });
 
@@ -281,13 +302,22 @@ const messageLabel = (timestamp) => {
   return `${date.toLocaleDateString("en-UK", options)}${suffix}`;
 };
 
-const chatPageMessagesRef = ref('')
+const messageAvatar = (messageFrom) => {
+  if (messageFrom == "me" && usersStore.userDetails.avatar) {
+    return usersStore.userDetails.avatar;
+  } else if (
+    messageFrom != "me" &&
+    usersStore.usersData[route.params.otherUserId].data.avatar
+  ) {
+    return usersStore.usersData[route.params.otherUserId].data.avatar;
+  } else {
+    return false;
+  }
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-page {
-  background-color: #e2dec7;
-
   .chat-page-messages,
   .no-chat-selected {
     div {

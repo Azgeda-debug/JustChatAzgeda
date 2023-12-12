@@ -36,17 +36,18 @@
         <q-btn
           v-if="route.path.includes('/chat')"
           flat
-          rounded
+          round
           color="white"
           dense
           icon="info"
-          class="absolute-right"
-          @click="settingsStore.showSettings = true"
+          class="absolute-right q-my-sm"
+          @click="settingsBetweenUsersStore.showSettingsBetweenUsers = true"
         />
       </q-toolbar>
     </q-header>
 
     <Settings />
+    <SettingsBetweenUsers />
 
     <q-page-container>
       <div
@@ -54,7 +55,8 @@
         v-show="$q.screen.width > 599 && store.userDetails.id"
       >
         <div class="col col-sm-4 col-md-3">
-          <UsersPage />
+          <UsersPage class="usersPageDesktop" />
+          
         </div>
         <div class="col-12 col-sm-8 col-md-9">
           <ChatPage />
@@ -69,22 +71,25 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import { useUsersStore } from "stores/users";
-import { useOtherUserDetails } from "src/composables/otherUserDetails";
 import { useSettingsStore } from "src/stores/settingsStore";
+import { useSettingsBetweenUsers } from "src/stores/settingsBetweenUsersStore";
+import Settings from "src/components/Settings";
+import SettingsBetweenUsers from "src/components/SettingsBetweenUsers";
 import UsersPage from "src/pages/UsersPage.vue";
 import ChatPage from "src/pages/ChatPage.vue";
 import AuthPage from "src/pages/AuthPage.vue";
+import { computed, onUnmounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useOtherUserDetails } from "src/composables/otherUserDetails";
 import { formatDistanceToNow } from "date-fns";
-import Settings from "src/components/Settings";
 
 const store = useUsersStore();
 const route = useRoute();
 const router = useRouter();
 
 const settingsStore = useSettingsStore();
+const settingsBetweenUsersStore = useSettingsBetweenUsers();
 
 const { otherUserDetails } = useOtherUserDetails();
 const pageTitle = computed(() => {
@@ -121,11 +126,11 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.absolute-right {
-  line-height: 1;
-}
-
 .text-subtitle1 {
   line-height: 0.5rem;
+}
+
+.usersPageDesktop {
+  border-right: 1px solid #e6e6e6;
 }
 </style>

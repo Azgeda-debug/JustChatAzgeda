@@ -8,7 +8,7 @@
     <div class="settings">
       <div class="position-relative">
         <q-scroll-area class="absolute full-height full-width">
-          <q-list bordered padding>
+          <q-list padding>
             <q-item-label header>Profile settings</q-item-label>
             <q-separator />
 
@@ -104,6 +104,8 @@
             >
               <q-item-label>Logout</q-item-label>
             </q-item>
+
+            <q-separator />
           </q-list>
         </q-scroll-area>
 
@@ -240,7 +242,7 @@ const removeAvatar = () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings {
   position: fixed;
   left: 0;

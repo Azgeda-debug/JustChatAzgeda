@@ -5,25 +5,27 @@
 }
 
 .bricks-theme {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 1;
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
 
-    --s: 50px;
-    /* control the size */
+        --s: 50px;
+        /* control the size */
 
-    --p: at 45% 40%, #0000 75%, ;
-    --g1: conic-gradient(var(--p)#c0b299 0);
-    --g2: conic-gradient(var(--p)#a4a9aa 0);
-    background:
-        var(--g1), var(--g2) calc(2*var(--s)) 0,
-        var(--g2) calc(3*var(--s)) var(--s),
-        var(--g1) var(--s) var(--s) #2c2e2a;
-    background-size: calc(4*var(--s)) calc(2*var(--s));
+        --p: at 45% 40%, #0000 75%, ;
+        --g1: conic-gradient(var(--p)#c0b299 0);
+        --g2: conic-gradient(var(--p)#a4a9aa 0);
+        background:
+            var(--g1), var(--g2) calc(2*var(--s)) 0,
+            var(--g2) calc(3*var(--s)) var(--s),
+            var(--g1) var(--s) var(--s) #2c2e2a;
+        background-size: calc(4*var(--s)) calc(2*var(--s));
+    }
 }
 
 .christmas-theme {
@@ -51,7 +53,7 @@
             var(--g2) 0 calc(var(--s)/ 4), var(--g2) var(--s) calc(5*var(--s)/4),
             var(--g3) calc(var(--s)/-10) var(--s),
             var(--g3) calc(9*var(--s)/10) calc(2*var(--s)),
-            repeating-conic-gradient(from 45deg, #a31e39 0 25%, #31570e 0 50%);
+            repeating-conic-gradient(from 45deg, #388429 0 25%, #2ca79ceb 0 50%);
         background-size: calc(2*var(--s)) calc(2*var(--s));
     }
 }
@@ -96,35 +98,7 @@
     }
 }
 
-.theme2 {
-    &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        z-index: 1;
-        opacity: 0.75;
-
-        --s: 80px;
-        /* control the size */
-        --c: #dbd8ca;
-
-        --_g:
-            #0000 calc(-650%/13) calc(50%/13), var(--c) 0 calc(100%/13),
-            #0000 0 calc(150%/13), var(--c) 0 calc(200%/13),
-            #0000 0 calc(250%/13), var(--c) 0 calc(300%/13);
-        --_g0: repeating-linear-gradient(45deg, var(--_g));
-        --_g1: repeating-linear-gradient(-45deg, var(--_g));
-        background:
-            var(--_g0), var(--_g0) var(--s) var(--s),
-            var(--_g1), var(--_g1) var(--s) var(--s) #c5bac0;
-        background-size: calc(2*var(--s)) calc(2*var(--s));
-    }
-}
-
-.theme3 {
+.geometric-figures {
     &::after {
         content: "";
         position: absolute;
@@ -154,3 +128,35 @@
     }
 
 }
+
+.town {
+    &::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 7%;
+        background-repeat: no-repeat;
+        flex: 0 0 75px;
+        background-image: url("../assets/town.png");
+        background-size: contain;
+        background-position: center bottom;
+    }
+  }
+
+  .town-preview {
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-repeat: no-repeat;
+        flex: 0 0 75px;
+        background-image: url("../assets/town.png");
+        background-size: contain;
+        background-position: center bottom;
+    }
+  }
